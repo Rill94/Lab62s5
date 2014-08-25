@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+
+    </h:head>
+   <h:body>
+       <h:form id="form">
+      <p:dataTable var="message"
+                   value="#{userBean.messageList}"
+                   selection="#{userBean.selectedMessagesList}"
+                   rowKey="#{message.messageId}"
+                   selectionMode="multiple">
+          <f:facet name="header">
+              Header for messages
+          </f:facet>
+          <p:column sortBy="messageId">
+              <f:facet name="header">
+                Id
+              </f:facet>
+              <h:outputText value="#{message.messageId}"/>
+          </p:column>
+          <p:column headerText="Text">
+              <h:outputText value="#{message.text}"/>
+          </p:column>
+          <p:column headerText="Date">
+              <h:outputText value="#{message.date}"/>
+          </p:column>
+          <p:column headerText="User">
+              <h:outputText value="#{userBean.selectUserById(message.user_UserId).login}"/>
+          </p:column>
+          <p:column style="width: 8%">
+              <p:commandButton value="Редактировать" action="#{userBean.toEditPage(message)}"/>
+          </p:column>
+          <f:facet name="footer">
+              <p:commandButton value="View" image="ui-icon ui-icon-search"
+                               update=":form:display" oncomplete="messageDialog.show()"/>
+          </f:facet>
+      </p:dataTable>
+
+
+           <p:dialog header="Message Detail" widgetVar="messageDialog"
+                     width="250" showEffect="explode" hideEffect="explode">
+
+               <p:dataList id="display"
+                           value="#{userBean.selectedMessagesList}"
+                           var="selectedMessage" type="definition">
+
+                   Date: #{selectedMessage.date}, Text: #{selectedMessage.text}
+               </p:dataList>
+
+           </p:dialog>
+       </h:form>
+   </h:body>
+</html>
